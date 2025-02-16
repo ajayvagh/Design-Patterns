@@ -1,0 +1,46 @@
+Registry :
+
+contains / stores information
+
+Holds Objects for you, that might we want to ReUse later
+
+any object that you don't want to use right away, but you require in future you save it using registry
+
+Registry is used with protoType to store Prototypes
+
+2 methods
+
+void register(String key, Student s)
+store the given object in registry
+
+Student get(String key)
+return the object with the given key
+
+uses map internally
+
+Multiple objects of Registry should not exist so make it singleton
+
+public class StudentRegistry {
+
+    private static StudentRegistry instance;
+
+    private StudentRegistry() {
+        map = new HashMap<>();
+    }
+
+    public static StudentRegistry getInstance() {
+        if (instance == null) {
+            instance = new StudentRegistry();
+        }
+        return instance;
+    }
+
+    private Map< String, Student > map;
+
+    public void register(String key, Student s) {
+        map.put(key, s);
+    }
+    public Student get(String key) {
+        return map.get(key);
+    }
+}

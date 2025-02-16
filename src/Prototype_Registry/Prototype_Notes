@@ -1,0 +1,122 @@
+ProtoType :
+
+The first version of a product
+
+- we have an object that require an api call or DB call to be created
+- and we want multiple replicas of this object
+- and only few attributes will be changing
+- we want multiple replicas of the object
+- so we want duplicates of the Object
+
+V1 :
+shallow copy
+Student st = getStudent(); name here is "XYZ"
+Student copy = st;
+copy.name = "ABC"
+sout(copy.name)
+
+it will be ABC
+- it will create a new reference variable only
+
+V2 :
+
+Student st = getStudent()
+
+Student copy = new Student();
+copy.name = st.name();
+copy.age = st.age();
+
+-> what if age is private attribute - compile time error
+-> duplicate code
+-> new attributes to be handled
+-> SRP & OCP violation(what if student -> IntelligentStudent)
+
+
+V3
+Copy Constructor
+passing the object in constructor
+
+-> still SRP & OCP violation
+
+
+V4
+Method Overriding
+
+public class Student {
+
+    public Student(Student st){
+
+    }
+
+    public Student clone(){     // override in child class
+        return new Student(this);
+    }
+}
+
+inside IntelligentStudent
+- will have it's own copy constructor
+- will have super(is)
+- then IS's attributes in constructor
+
+in Clone method override
+return new IS(this)
+
+
+inside main
+Student st = getStudent()
+Student st1 = st.clone()
+
+
+public class Student {
+
+    private int age;
+    public String name;
+    public String university;
+
+    public Student(int age, String name, String university) {
+        this.age = age;
+        this.name = name;
+        this.university = university;
+    }
+
+    public Student (Student original) {
+        this.age = original.age;
+        this.name = original.name;
+        this.university = original.university;
+    }
+
+    public Student clone() {
+        return new Student(this);
+    }
+}
+
+public class IntelligentStudent extends Student{
+    int iq;
+
+
+    public IntelligentStudent(IntelligentStudent original) {
+        super(original);
+        this.iq = original.iq;
+    }
+
+    public IntelligentStudent(int age, String name, String university, int iq) {
+        super(age, name, university);
+        this.iq = iq;
+    }
+
+    public IntelligentStudent clone(){
+        return new IntelligentStudent(this);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Student s = new Student(20, "ABC", "XYZ");
+
+        Student copy = s.clone();
+
+        Student is = new IntelligentStudent(20, "ABCD", "WXYSZ", 180);
+
+        Student isCopy = is.clone();
+    }
+}
