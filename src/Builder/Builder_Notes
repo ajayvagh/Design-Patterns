@@ -1,0 +1,233 @@
+Builder :
+
+when to use?
+- class has lots of attributes
+- some attribute require validations and checks, else Object should not be created
+- some attributes and compulsory and some are not
+
+Solutions :
+- using getters and setters we can enforce compulsory attributes
+- but if age is less than 18 Object should not be created,
+  but still object will be created than setter will work so - X
+
+= we can use constructors also by constructor overloading
+- but all attributes will be compulsory
+- in future if change required there will be huge changes
+
+V1 :
+- we make helper class with same attributes from student class
+CON - but there will be two classes and two objects
+
+public class Student {
+    String name;
+    String email;
+    int age;
+    String university;
+    String yearOfGraduation;
+
+    public Student(Helper helper) {
+            if (helper.age < 18){
+                throw new RuntimeException("Age can not be less than 18");
+            }
+
+            if(!(helper.name != null && helper.email != null)){
+                throw new RuntimeException("Name and email are both null");
+            }
+            this.name = helper.name;
+            this.email = helper.email;
+            this.age = helper.age;
+            this.university = helper.university;
+            this.yearOfGraduation = helper.yearOfGraduation;
+    }
+}
+
+public class Helper {
+    String name;
+    String email;
+    int age;
+    String university;
+    String yearOfGraduation;
+
+    // add getters and setters
+}
+
+// changed name from Helper to Builder
+// this will be main class
+public class Main {
+    public static void main(String[] args) {
+        Builder builder = new Builder();
+        builder.setAge(20);
+        builder.setName("John");
+        builder.setEmail("john@123");
+        builder.setUniversity("ABC");
+        builder.setYearOfGraduation(2024);
+
+        Student student = new Student(builder);
+
+    }
+}
+
+Suppose 1000 classes there will be 1000 builder classes
+
+so we make inner class V2
+V2 :
+- inner classes will be used
+- once Builder class is not referred it will go for garbage collection
+
+but to create object of inner class we need to make Object of outer class
+
+A.a = new A();
+A.B b = new a.new B();
+
+- but this will make Object of Student anyway so
+- Solution = Static inner class
+
+So new class will look like
+
+public class A {
+    int abc;
+
+    static class B{
+
+    }
+}
+// main class
+public class Main {
+    public static void main(String[] args) {
+        A.B b = new A.B();
+    }
+}
+
+V3 Production Builder Final Version
+- make builder static inner class
+- hide builder class via creating method getBuilder()
+public static Builder getBuilder() {
+        return new Builder();
+    }
+
+- in all the setters of our Builder, return the Builder Object and return this;
+- to validate we create method inside Builder public Student build()
+
+Final Code
+
+package Builder.V3;
+
+public class Student {
+    String name;    // check needed
+    String email;   // check needed
+    int age;    // check needed
+    String university;
+    int yearOfGraduation;
+
+    public static Builder getBuilder() {
+        return new Builder();
+    }
+
+    // constructor to get Build
+    private Student (Builder builder) {
+        this.name = builder.name;
+        this.email = builder.email;
+        this.age = builder.age;
+        this.university = builder.university;
+        this.yearOfGraduation = builder.yearOfGraduation;
+    }
+
+    static class Builder{
+        String name;    // check needed
+        String email;   // check needed
+        int age;    // check needed
+        String university;
+        int yearOfGraduation;
+
+        public String getName() {
+            return name;
+        }
+
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public Builder setEmail(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public int getAge() {
+            return age;
+        }
+
+        public Builder setAge(int age) {
+            this.age = age;
+            return this;
+        }
+
+        public String getUniversity() {
+            return university;
+        }
+
+        public Builder setUniversity(String university) {
+            this.university = university;
+            return this;
+        }
+
+        public int getYearOfGraduation() {
+            return yearOfGraduation;
+        }
+
+        public Builder setYearOfGraduation(int yearOfGraduation) {
+            this.yearOfGraduation = yearOfGraduation;
+            return this;
+        }
+
+        public Student build() {
+            // validations
+            if(age < 18){
+                throw new IllegalArgumentException("Age must be at least 18");
+            }
+            if(!(name != null && email != null)){
+                throw new IllegalArgumentException("Name and email are required");
+            }
+
+            return new Student(this);
+        }
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+
+        Student sb = Student.getBuilder()
+                .setAge(25)
+                .setName("John")
+                .setEmail("john@gmail.com")
+                .setUniversity("University Of Computer Science")
+                .setYearOfGraduation(2025)
+                .build();
+    }
+
+//    Student s1 = new Student(new Student.Builder());
+    // can make validations useless so
+    // to force Client make Student Constructor Private
+    // as soon as private added this will show error
+}
+
+
+Steps :
+Student class
+- make inner Static Builder
+- make getBuilder method in Student it will be private static and returns new Builder
+- inside Builder Setter methods will return Builder and return this
+- make build method with validations and it will return new Student(this)
+- pass Builder in Student Constructor and make it private
+- inside main create Object by Student.getBuilder().set().build()
+
+
+
+
+

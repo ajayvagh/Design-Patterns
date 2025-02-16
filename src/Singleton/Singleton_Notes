@@ -1,0 +1,104 @@
+Singleton Design Pattern :
+- whenever we want a class to have 1 and only 1 object through out application
+  we will use SSingleton
+
+- a class interacts with shared resource should be singleton
+= example. database is shared resource so can be multiple connections
+= there will be many objects created for every connection
+= so for every Service will have limited connection
+= ram usage will be increased
+
+-if object is resource intensive
+= heavy in memory
+= takes more time in creating object
+
+V1 solution
+
+public class DBCv1 {
+
+}
+
+DBC dbcv1 = new DBC();
+DBC dbc1 = new DBC();
+
+can make multiple objects
+So make constructor private
+
+public class DBCv1 {
+
+    private DBCv1(){
+
+    }
+}
+
+- so to get object we make static method getInstance
+public class DBCv1 {
+
+    private DBCv1(){
+
+    }
+    public static DBCv1 getInstance(){
+        return new DBCv1();
+    }
+}
+
+DBC dbc = DBC.getInstance()
+
+but it still return new object everytime
+
+so we make instance variable and it will be static as well as private
+
+public class DBCv1 {
+
+    private DBCv1(){
+
+    }
+    private static DBCv1 instance = null;
+
+    public static DBCv1 getInstance(){
+        if(instance == null){
+            instance = new DBCv1();
+        }
+        return instance;
+    }
+}
+this is final V1
+
+=> But not thread safe so V2
+=> Eager Initialisation
+
+- in this we will have instance ready
+public class DBCv2 {
+    private DBCv2(){
+
+    }
+    private static DBCv2 instance = new DBCv2();
+
+    public static DBCv2 getInstance(){
+        return instance;
+    }
+}
+
+- but what if object wasn't needed
+- it may take up some memory
+
+= so we go for V3
+= Double check lock - final solution
+= we use synchronized key word in second check for performance
+
+public class DBC {
+    private DBC(){
+
+    }
+    private static DBC instance = null;
+    public DBC getInstance(){
+        if(instance == null){
+            synchronized (this){
+                if(instance == null){
+                    instance = new DBC();
+                }
+            }
+        }
+        return instance;
+    }
+}
