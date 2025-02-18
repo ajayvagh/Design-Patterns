@@ -1,0 +1,31 @@
+Strategy :
+
+=> when u have more than 1 way to do something Use Strategy
+
+Google Maps
+Multiple route methods like bike, car, walk, train
+
+- <<Route Strategy >>
+- Build Route() method
+- public getRouteStrategy(Mode mode) if walk = mode.walk ...
+- multiple classes of the interface
+- walk Strategy
+- car Strategy
+- bike Strategy
+
+Route Strategy rs = mode.getRouteStrategy();
+rs.buildRoute()
+
+it will depend on mode
+which ever mode is in mode.getRouteStrategy();
+
+- if else blocks but not violating OCP or SRP
+- bcz business logic
+
+either we can use If else or HashMap Map ( Mode, RouteStrategy )
+difference
+- hashmap returns object again and again after created
+- in if else object created when required
+- but in hashmap it will create
+
+=> whenever there are multiple ways to do something we should think of Strategy DP

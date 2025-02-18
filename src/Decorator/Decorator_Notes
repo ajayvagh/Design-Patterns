@@ -1,0 +1,23 @@
+Decorator : Structural
+
+- SDE at IceCream company
+- build a s/w system which can build customise IceCreams
+
+V1
+= Class Explosion if we create classes for every Permutations & Combinations
+
+
+V2
+= All are ingredients - cone, scoops, choco chips
+
+- << Ingredient >> double getCost(), string getDescription()
+child classes = chocoCone, StrawCone, MangoScoop, ChocoChips
+
+V3 final
+
+<<Ingredient>> getCost(), getDescription
+- ChocoCone, StrawCone, - Abstract Class IngredientDecorate { Ingredient baseIngredient }
+Abstract Class IngredientDecorate { Ingredient baseIngredient }
+add ons will inherit from this abstract class and in all of their constructors baseIngredient injected
+
+Real life Example : HTML code, Pizza

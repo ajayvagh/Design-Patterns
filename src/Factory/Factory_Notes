@@ -1,0 +1,16 @@
+Factory :
+
+<< DATABASE >> createQuery(), connect()
+- mySQL DB, Postgres DB
+
+all database have different createQuery
+so
+<< Query >>
+mySQL query
+Mongo Query
+
+Database {
+    Query  createQuery(); -> provide corresponding query
+    }
+
+= when

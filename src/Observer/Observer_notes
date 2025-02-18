@@ -1,0 +1,30 @@
+Observer :
+
+Amazon : placeOrder -> Inventory, billing, notification, seller
+
+Implementation :
+interface : << EventHandler >> - HandleEvent();
+InventoryPOEhandler, billingPOEhandler, ...
+diff implementations
+
+PlaceOrderPublisher :
+register();
+deregister();
+placeOrder();
+
+class PlaceOrderPublisher {
+    List < EventHandler > events
+    public void register(EventHandler eh){
+        events.add(eh)
+    }
+
+    public void deregister(EventHandler eh){
+            events.remove(eh)
+    }
+
+    public void placeOrder(){
+        for(EventHandler eh : events){
+            eh.handle();
+        }
+    }
+}

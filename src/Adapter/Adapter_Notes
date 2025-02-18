@@ -1,0 +1,38 @@
+Adapter :
+- is used to make two incompatible code bases work with each other
+- make two code bases compatible
+
+= whenever we want to integrate 3ed party service do it via Adapter
+
+Example
+- Zomato using SandGrid to send emails
+- both classes are depended on each other
+- dependency principle violated
+
+- now we want to move to MailGun
+- so now we have to add MailGun dependency
+- but it will have different methods and types
+
+To fix this scenario we use Adapter
+
+Steps to implement Adapter
+- Introduce an interface or abstract class called as email Adapter
+
+- create interface EmailAdapter
+- implement SendEmail method
+- whichever library u want to use,create a class for it and make it implement emailAdapter
+- emailGun will have to implement emailAdapter
+- also sandGrid will implement emailAdapter
+
+- create Attribute of emailAdapter interface/class what ever
+- and put an object of any of the children via DI or via hardCoding
+
+emailAdapter ea = new SendGridAdapter();
+now sendEmail method will be called on sendGridAdapter
+if we replace it with mailGun we can easily do it, just inject it's object
+
+Same as Payment service = RazorPay / Stripe
+
+Another example :
+PhonePe using YesBankApi
+it switched to ICICi by Adapter pattern
